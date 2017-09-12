@@ -42,20 +42,19 @@ func main() {
 
 	filepath.Walk(rootDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error reading %s: %s\n", path, err)
-			// Skip stuff we can't read.
-			return nil
+			fmt.Fprintf(os.Stderr, "terraform-s3-dir: Error reading %s: %s\n", path, err)
+			return err
 		}
 
 		relPath, err := filepath.Rel(rootDir, path)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Failed make %s relative: %s\n", path, err)
+			fmt.Fprintf(os.Stderr, "terraform-s3-dir: Failed make %s relative: %s\n", path, err)
 			return nil
 		}
 
 		path, err = filepath.EvalSymlinks(path)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to resolve symlink %s: %s\n", path, err)
+			fmt.Fprintf(os.Stderr, "terraform-s3-dir: Failed to resolve symlink %s: %s\n", path, err)
 			return nil
 		}
 
